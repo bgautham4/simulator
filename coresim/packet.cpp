@@ -90,3 +90,4 @@ FastpassSchedulePkt::FastpassSchedulePkt(Flow *flow, Host *src, Host *dst, Fastp
     this->schedule = schd;
 }
 
+constexpr Packet::bytes_t Packet::mss;
