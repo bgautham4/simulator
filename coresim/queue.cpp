@@ -78,6 +78,10 @@ Packet *Queue::deque() {
         bytes_in_queue -= p->size;
         p_departures += 1;
         b_departures += p->size;
+        if(p->type ==  NORMAL_PACKET || p->type == STORM_PACKET)
+            if(p->flow->first_byte_send_time < 0)
+                p->flow->first_byte_send_time = get_current_time();
+
         return p;
     }
     return NULL;

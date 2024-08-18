@@ -24,6 +24,8 @@
 #include "../ext/capabilityflow.h"
 #include "../ext/fastpassTopology.h"
 
+#include "../ext/stormhost.h"
+
 #include "flow_generator.h"
 #include "stats.h"
 #include "params.h"
@@ -235,7 +237,13 @@ void run_experiment(int argc, char **argv, uint32_t exp_type) {
     if (params.flow_type == FASTPASS_FLOW) {
         dynamic_cast<FastpassTopology*>(topology)->arbiter->start_arbiter();
     }
-
+    
+    if (params.host_type == STORM_HOST) {
+        for (auto h : topology->hosts) {
+            static_cast<StormHost*>(h)->start_clock(1.0);
+        }
+    }
+    
     // 
     // everything before this is setup; everything after is analysis
     //
