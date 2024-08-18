@@ -10,6 +10,7 @@
 #define PFABRIC_QUEUE 2
 #define PROB_DROP_QUEUE 4
 #define DCTCP_QUEUE 5
+#define CPQUEUE 6
 
 /* Flow types */
 #define NORMAL_FLOW 1
@@ -20,6 +21,7 @@
 #define MAGIC_FLOW 113
 #define FASTPASS_FLOW 114
 #define IDEAL_FLOW 120
+#define STORM_FLOW 130
 
 /* Host types */
 #define NORMAL_HOST 1
@@ -29,6 +31,7 @@
 #define FASTPASS_HOST 14
 #define FASTPASS_ARBITER 10
 #define IDEAL_HOST 20
+#define STORM_HOST 30
 
 class Factory {
     public:

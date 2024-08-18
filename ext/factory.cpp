@@ -1,5 +1,10 @@
 #include "factory.h"
 
+#include "cutpayloadqueue.h"
+
+#include "stormflow.h"
+#include "stormhost.h"
+
 #include "pfabricqueue.h"
 #include "pfabricflow.h"
 
@@ -42,6 +47,8 @@ Queue* Factory::get_queue(
             return new ProbDropQueue(id, rate, queue_size, drop_prob, location);
         case DCTCP_QUEUE:
             return new DctcpQueue(id, rate, queue_size, location);
+        case CPQUEUE:
+            return new CutPayloadQueue(id, rate, 49*1500, location);
     }
     assert(false);
     return NULL;
@@ -94,6 +101,9 @@ Flow* Factory::get_flow(
         case IDEAL_FLOW:
             return new IdealFlow(id, start_time, size, src, dst);
             break;
+        case STORM_FLOW:
+            return new StormFlow(id, start_time, size, src, dst);
+            break;
     }
     assert(false);
     return NULL;
@@ -121,6 +131,8 @@ Host* Factory::get_host(
         case FASTPASS_HOST:
             return new FastpassHost(id, rate, queue_type);
             break;
+        case STORM_HOST:
+            return new StormHost(id, rate, DROPTAIL_QUEUE);
         case IDEAL_HOST:
             if (ideal_arbiter == NULL) {
                 ideal_arbiter = new IdealArbiter();
