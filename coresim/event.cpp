@@ -17,6 +17,8 @@
 
 #include "../run/params.h"
 
+#include "../ext/stormflow.h"
+
 extern Topology* topology;
 extern std::priority_queue<Event*, std::vector<Event*>, EventComparator> event_queue;
 extern double current_time;
@@ -51,6 +53,8 @@ extern void add_to_event_queue(Event *);
 extern int get_event_queue_size();
 
 uint32_t Event::instance_count = 0;
+
+
 
 Event::Event(uint32_t type, double time) {
     this->type = type;
@@ -306,27 +310,49 @@ void FlowFinishedEvent::process_event() {
         slowdown = 1.0;
     }
     if (slowdown < 1.0) {
-        std::cout << "bad slowdown " << 1e6 * flow->flow_completion_time << " " << topology->get_oracle_fct(flow) << " " << slowdown << "\n";
+        std::cout << "bad slowdown " << flow->size << " " << 1e6 * flow->flow_completion_time << " " << topology->get_oracle_fct(flow) << " " << slowdown << "\n";
     }
     assert(slowdown >= 1.0);
 
     if (print_flow_result()) {
-        std::cout << std::setprecision(4) << std::fixed ;
-        std::cout
-            << flow->id << " "
-            << flow->size << " "
-            << flow->src->id << " "
-            << flow->dst->id << " "
-            << 1000000 * flow->start_time << " "
-            << 1000000 * flow->finish_time << " "
-            << 1000000.0 * flow->flow_completion_time << " "
-            << topology->get_oracle_fct(flow) << " "
-            << slowdown << " "
-            << flow->total_pkt_sent << "/" << (flow->size/flow->mss) << "//" << flow->received_count << " "
-            << flow->data_pkt_drop << "/" << flow->ack_pkt_drop << "/" << flow->pkt_drop << " "
-            << 1000000 * (flow->first_byte_send_time - flow->start_time) << " "
-            << std::endl;
-        std::cout << std::setprecision(9) << std::fixed;
+        if (params.flow_type == STORM_FLOW) {
+            auto f = static_cast<StormFlow*>(flow);
+            std::cout << std::setprecision(4) << std::fixed ;
+            std::cout
+                << flow->id << " "
+                << flow->size << " "
+                << flow->src->id << " "
+                << flow->dst->id << " "
+                << 1000000 * flow->start_time << " "
+                << 1000000 * flow->finish_time << " "
+                << 1000000.0 * flow->flow_completion_time << " "
+                << topology->get_oracle_fct(flow) << " "
+                << slowdown << " "
+                << flow->total_pkt_sent << "/" << (flow->size/flow->mss) << "//" << flow->received_count << " "
+                << flow->data_pkt_drop << "/" << flow->ack_pkt_drop << "/" << flow->pkt_drop << " "
+                << f->num_trimmed_packets_received << "/" << f->num_retransmits << "/" << f->num_bad_retransmits_received  << " "
+                << 1000000 * (flow->first_byte_send_time - flow->start_time) << " "
+                << std::endl;
+            std::cout << std::setprecision(9) << std::fixed;
+        }
+        else {
+            std::cout << std::setprecision(4) << std::fixed ;
+            std::cout
+                << flow->id << " "
+                << flow->size << " "
+                << flow->src->id << " "
+                << flow->dst->id << " "
+                << 1000000 * flow->start_time << " "
+                << 1000000 * flow->finish_time << " "
+                << 1000000.0 * flow->flow_completion_time << " "
+                << topology->get_oracle_fct(flow) << " "
+                << slowdown << " "
+                << flow->total_pkt_sent << "/" << (flow->size/flow->mss) << "//" << flow->received_count << " "
+                << flow->data_pkt_drop << "/" << flow->ack_pkt_drop << "/" << flow->pkt_drop << " "
+                << 1000000 * (flow->first_byte_send_time - flow->start_time) << " "
+                << std::endl;
+            std::cout << std::setprecision(9) << std::fixed;
+        }
     }
 }
 
