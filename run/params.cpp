@@ -173,6 +173,9 @@ void read_experiment_parameters(std::string conf_filename, uint32_t exp_type) {
         else if (key == "bytes_mode") {
             lineStream >> params.bytes_mode;
         }
+        else if (key == "util_file") {
+            lineStream >> params.util_file;
+        }
         //else if (key == "dctcp_delayed_ack_freq") {
         //    lineStream >> params.dctcp_delayed_ack_freq;
         //}

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <fstream>
+#include <cstdint>
 
 class DCExpParams {
     public:
@@ -67,6 +68,7 @@ class DCExpParams {
         uint32_t schedule_by_deadline;
         double avg_deadline;
         std::string interarrival_cdf;
+        std::string util_file;
         uint32_t num_host_types;
 
         double fastpass_epoch_time;
