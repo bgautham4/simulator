@@ -14,11 +14,14 @@ simulator_SOURCES = 				 		 	 \
 					coresim/random_variable.cpp  \
 					ext/factory.cpp 		 	 \
 					ext/pfabricqueue.cpp         \
+					ext/cutpayloadqueue.cpp		 \
 					ext/pfabricflow.cpp          \
 					ext/schedulinghost.cpp	     \
 					ext/fountainflow.cpp 	   	 \
 					ext/magichost.cpp 		   	 \
 					ext/magicflow.cpp 		   	 \
+					ext/stormflow.cpp			 \
+					ext/stormhost.cpp			 \
 					ext/capabilityflow.cpp 	   	 \
 					ext/capabilityhost.cpp 	   	 \
 					ext/fastpassflow.cpp 	   	 \

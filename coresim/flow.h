@@ -1,6 +1,7 @@
 #ifndef FLOW_H
 #define FLOW_H
 
+#include <cstdint>
 #include <unordered_map>
 #include "node.h"
 
@@ -33,6 +34,7 @@ class Flow {
         virtual void increase_cwnd();
         virtual double get_avg_queuing_delay_in_us();
 
+        virtual void log_utilization(uint32_t pkt_size);
         uint32_t id;
         double start_time;
         double finish_time;
