@@ -109,6 +109,10 @@ void run_scenario() {
             break;
         }
 
+        if (total_finished_flows >= params.num_flows_to_run) {
+            break;
+        }
+        
         delete ev;
     }
 }

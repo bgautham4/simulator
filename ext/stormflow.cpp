@@ -10,15 +10,16 @@ constexpr double StormFlow::RTO;
 
 extern uint32_t num_outstanding_packets;
 
-Packet* StormFlow::send(Packet::seqno_t seqno, bool pulled) {
-    bool last_packet = (seqno + Packet::mss >= size) ? true : false;
-    auto p = new StormPacket(this, src, dst, seqno, Packet::mss + 40, last_packet);
+Packet::bytes_t StormFlow::send(Packet::seqno_t seqno, bool pulled) {
+    Packet::bytes_t bytes_sent = std::min(size - seqno, Packet::mss);
+    bool last_packet = (seqno + bytes_sent >= size) ? true : false;
+    auto p = new StormPacket(this, src, dst, seqno, bytes_sent + 40, last_packet);
     //std::cout << "Packet has seqno " << p->seqno() << '\n';
     total_pkt_sent++;
     auto h = static_cast<StormHost*>(src);
     //(pulled) ? h->enqueue_front_nic_buffer(p) : h->enqueue_back_nic_buffer(p);
     h->enqueue_back_nic_buffer(p);
-    return p;
+    return bytes_sent;
 }
 
 void StormFlow::send_pull(PullPkt::pullctr_t ctr) {
@@ -130,10 +131,7 @@ void StormFlow::receive(Packet *pkt) {
                     _rtx_list.erase(_rtx_list.begin());
                 }
                 else {
-                    if (_seqno + Packet::mss <= size) {
-                        send(_seqno, false);
-                        _seqno += Packet::mss;
-                    }
+                    send_pending_data();
                 }
             }
             break;    
@@ -152,7 +150,11 @@ void StormFlow::receive(Packet *pkt) {
                 ++num_packets_received;
                 ++received_count;
                 if (data_pkt->_seqno == _cum_ackno) { //Expected packet, 
-                    _cum_ackno = data_pkt->_seqno + Packet::mss ; //Assumption!! All packets are full sized. Flow size is hence some multiple of mss.
+                    /*Should actually increment cum_ackno by size of packet, but since all
+                    packets except possibly for that last one may not be of MSS size, we can continue
+                    to increment cum_ackno by MSS
+                    */
+                    _cum_ackno = data_pkt->_seqno + Packet::mss ;
                     //Any other packets which now can be cum_acked?
                     for (auto it = _received.begin(); it != _received.end() && *it == _cum_ackno;) {
                         _cum_ackno += Packet::mss;
@@ -160,7 +162,7 @@ void StormFlow::receive(Packet *pkt) {
                     }
 
                     //Update some global variables used for logging utilization
-                    if (num_outstanding_packets >= 1) { //Again continuing with the assumption that all packets are full sized.
+                    if (num_outstanding_packets >= 1) { 
                         num_outstanding_packets -= 1;
                     }
                     log_utilization(data_pkt->size);
@@ -207,14 +209,18 @@ void StormFlow::start_flow() {
 }
 
 void StormFlow::send_intial_window() {
-    while ( (_seqno + Packet::mss <= size) && (_seqno + Packet::mss <= 49 * Packet::mss) ) {
-        //std::cout << "Made packet with seqno " << _seqno << " at" << get_current_time() << '\n';
-        send(_seqno, false);
-        _seqno += Packet::mss;
+    while ( (_seqno < size) && (_seqno < 49 * Packet::mss) ) {
+        send_pending_data();   
     }
-    //TODO: set RTX timer
 }
 
+inline void StormFlow::send_pending_data() {
+    if (_seqno >= size) {
+        return;
+    }
+    auto bytes_sent = send(_seqno, false);
+    _seqno += bytes_sent;
+}
 
 inline void StormFlow::receive_notification(StormNotifyPkt &notify) {
     static_cast<StormHost*>(dst)->receive_notify(notify);

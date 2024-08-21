@@ -21,7 +21,8 @@ class StormFlow : public Flow {
         }
         virtual void start_flow();
         virtual void receive(Packet *pkt);
-        Packet* send(Packet::seqno_t seqno, bool pulled);
+        Packet::bytes_t send(Packet::seqno_t seqno, bool pulled);
+        void send_pending_data();
         void send_intial_window();
 
         void pull_packets(PullPkt::pullctr_t pullno);
