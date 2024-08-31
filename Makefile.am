@@ -22,6 +22,8 @@ simulator_SOURCES = 				 		 	 \
 					ext/magicflow.cpp 		   	 \
 					ext/stormflow.cpp			 \
 					ext/stormhost.cpp			 \
+					ext/ndpflow.cpp				 \
+					ext/ndphost.cpp				 \
 					ext/capabilityflow.cpp 	   	 \
 					ext/capabilityhost.cpp 	   	 \
 					ext/fastpassflow.cpp 	   	 \

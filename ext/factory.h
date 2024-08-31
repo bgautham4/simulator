@@ -22,6 +22,7 @@
 #define FASTPASS_FLOW 114
 #define IDEAL_FLOW 120
 #define STORM_FLOW 130
+#define NDP_FLOW 140
 
 /* Host types */
 #define NORMAL_HOST 1
@@ -32,6 +33,7 @@
 #define FASTPASS_ARBITER 10
 #define IDEAL_HOST 20
 #define STORM_HOST 30
+#define NDP_HOST 40
 
 class Factory {
     public:

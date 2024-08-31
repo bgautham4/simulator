@@ -190,6 +190,9 @@ class StormAcceptPkt : public Packet {
 class PullPkt : public Packet {
     friend class StormFlow;
     friend class StormHost;
+    //Reuse by NDP
+    friend class NDPHost;
+    friend class NDPFlow;
     public:
         using pullctr_t = uint32_t;
         PullPkt(Flow *flow, Host *src, Host *dst, pullctr_t ctr) : Packet(0,flow, 0,0,40,src,dst),_ctr(ctr) {
@@ -203,6 +206,9 @@ class PullPkt : public Packet {
 class StormAckPkt : public Packet {
     friend class StormFlow;
     friend class StormHost;
+    //Reuse by NDP
+    friend class NDPHost;
+    friend class NDPFlow;
     public:
         StormAckPkt(Flow *flow, Host *src, Host *dst, seqno_t ackno, seqno_t cum_ack) : Packet(0,flow,0,0,40,src,dst), _ackno(ackno), _cum_ackno(cum_ack){
             type = STORM_ACK;
@@ -215,6 +221,9 @@ class StormAckPkt : public Packet {
 class StormNackPkt : public Packet {
     friend class StormFlow;
     friend class StormHost;
+    //Reuse by NDP
+    friend class NDPHost;
+    friend class NDPFlow;
     public:
         StormNackPkt(Flow *flow, Host *src, Host *dst, seqno_t nackno, bool pull) : Packet(0,flow,0,0,40,src,dst), _nackno(nackno), _pull(pull)
         {
@@ -228,6 +237,9 @@ class StormNackPkt : public Packet {
 class StormPacket : public Packet {
     friend class StormFlow;
     friend class StormHost;
+    //Reuse by NDP
+    friend class NDPHost;
+    friend class NDPFlow;
     public:
         StormPacket(Flow *flow, Host *src, Host *dst, seqno_t seqno, bytes_t size, bool last_packet) : Packet(0,flow,0,0,size,src,dst), _seqno(seqno),_last_packet(last_packet){
             type = STORM_PACKET;

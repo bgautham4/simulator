@@ -1,5 +1,5 @@
-#ifndef CP_QUEUE
-#define CP_QUEUE
+#ifndef CP_QUEUE_H
+#define CP_QUEUE_H
 #include "../coresim/queue.h"
 #include "../coresim/packet.h"
 

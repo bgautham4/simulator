@@ -18,6 +18,7 @@
 #include "../run/params.h"
 
 #include "../ext/stormflow.h"
+#include "../ext/ndpflow.h"
 
 extern Topology* topology;
 extern std::priority_queue<Event*, std::vector<Event*>, EventComparator> event_queue;
@@ -331,6 +332,25 @@ void FlowFinishedEvent::process_event() {
                 << flow->total_pkt_sent << "/" << (flow->size/flow->mss) << "//" << flow->received_count << " "
                 << flow->data_pkt_drop << "/" << flow->ack_pkt_drop << "/" << flow->pkt_drop << " "
                 << f->num_trimmed_packets_received << "/" << f->num_retransmits << "/" << f->num_bad_retransmits_received  << " "
+                << 1000000 * (flow->first_byte_send_time - flow->start_time) << " "
+                << std::endl;
+            std::cout << std::setprecision(9) << std::fixed;
+        }
+        else if (params.flow_type == NDP_FLOW) {
+            auto f = static_cast<StormFlow*>(flow);
+            std::cout << std::setprecision(4) << std::fixed ;
+            std::cout
+                << flow->id << " "
+                << flow->size << " "
+                << flow->src->id << " "
+                << flow->dst->id << " "
+                << 1000000 * flow->start_time << " "
+                << 1000000 * flow->finish_time << " "
+                << 1000000.0 * flow->flow_completion_time << " "
+                << topology->get_oracle_fct(flow) << " "
+                << slowdown << " "
+                << flow->data_pkt_drop << "/" << flow->ack_pkt_drop << "/" << flow->pkt_drop << " "
+                << f->size_in_pkt << "/" << f->total_pkt_sent << "/" << f->num_packets_received << "/" << f->num_trimmed_packets_received << "/" << f->num_retransmits << "/" << f->num_bad_retransmits_received << " "
                 << 1000000 * (flow->first_byte_send_time - flow->start_time) << " "
                 << std::endl;
             std::cout << std::setprecision(9) << std::fixed;

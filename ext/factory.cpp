@@ -2,6 +2,7 @@
 
 #include "cutpayloadqueue.h"
 
+#include "ndpflow.h"
 #include "stormflow.h"
 #include "stormhost.h"
 
@@ -24,6 +25,8 @@
 #include "dctcpQueue.h"
 #include "dctcpFlow.h"
 
+#include "ndpflow.h"
+#include "ndphost.h"
 #include "ideal.h"
 
 IdealArbiter* ideal_arbiter = NULL;
@@ -104,6 +107,8 @@ Flow* Factory::get_flow(
         case STORM_FLOW:
             return new StormFlow(id, start_time, size, src, dst);
             break;
+        case NDP_FLOW:
+            return new NDPFlow(id, start_time, size, src, dst);
     }
     assert(false);
     return NULL;
@@ -133,6 +138,10 @@ Host* Factory::get_host(
             break;
         case STORM_HOST:
             return new StormHost(id, rate, DROPTAIL_QUEUE);
+            break;
+        case NDP_HOST:
+            return new NDPHost(id, rate, DROPTAIL_QUEUE);
+            break;
         case IDEAL_HOST:
             if (ideal_arbiter == NULL) {
                 ideal_arbiter = new IdealArbiter();
