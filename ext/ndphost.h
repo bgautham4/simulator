@@ -23,7 +23,7 @@ class NDPHost : public Host {
     friend class NICScheduleEvent;
     friend class PullScheduleEvent;
     public:
-        NDPHost(uint32_t id, double rate, uint32_t queue_type) : Host(id, rate, queue_type,NORMAL_HOST) {
+        NDPHost(uint32_t id, double rate, uint32_t queue_type) : Host(id, rate, queue_type, NORMAL_HOST) {
         }
 
         void add_active_flows(NDPFlow *flow) { _active_flows.push_back(flow); }
@@ -66,5 +66,4 @@ class PullScheduleEvent : public Event {// To unlock the pacer:
     private:
         NDPHost *_host;
 };
-
 #endif

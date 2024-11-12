@@ -1,9 +1,7 @@
 #include <sstream>
 #include <iostream>
-#include <algorithm>
 #include <fstream>
 #include <stdlib.h>
-#include <deque>
 #include <stdint.h>
 #include <math.h>
 #include <assert.h>

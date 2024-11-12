@@ -81,7 +81,7 @@ void NDPFlow::receive(Packet *pkt) {
             else {
                 update_rtx_timer();
             }
-            
+
             break;
         }
 
@@ -101,7 +101,7 @@ void NDPFlow::receive(Packet *pkt) {
         case PULL: {
             auto pullpkt = static_cast<PullPkt*>(pkt);
             while (_sender_pullno < pullpkt->_ctr) {
-                _sender_pullno++;
+                ++_sender_pullno;
                 //Check rtx queue
                 if (!_rtx_list.empty()) {
                     ++num_retransmits;
@@ -112,7 +112,7 @@ void NDPFlow::receive(Packet *pkt) {
                     send_pending_data();
                 }
             }
-            break;    
+            break;
         }
         case STORM_PACKET: {
             if (!recv->has_active_flow(this)) {
@@ -135,7 +135,7 @@ void NDPFlow::receive(Packet *pkt) {
                     packets except possibly for that last one may not be of MSS size, we can continue
                     to increment cum_ackno by MSS
                     */
-                    _cum_ackno = data_pkt->_seqno + Packet::mss ;
+                    _cum_ackno = data_pkt->_seqno + Packet::mss;
                     //Any other packets which now can be cum_acked?
                     for (auto it = _received.begin(); it != _received.end() && *it == _cum_ackno;) {
                         _cum_ackno += Packet::mss;
@@ -191,7 +191,7 @@ void NDPFlow::send_intial_window() {
     }
 }
 
-inline void NDPFlow::send_pending_data() {
+void NDPFlow::send_pending_data() {
     if (_seqno >= size) {
         return;
     }

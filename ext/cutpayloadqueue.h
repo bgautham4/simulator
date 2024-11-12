@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <deque>
 #include <cstddef>
+#include <array>
 
 class CutPayloadQueue : public Queue {
     public:
@@ -18,15 +19,14 @@ class CutPayloadQueue : public Queue {
         /*Queue serves priority levels HI and LOW with a
         ratio of 10:1
         */
-        static constexpr uint32_t LOW_RATIO = 1;
-        static constexpr uint32_t HI_RATIO = 10;
-        typedef enum PrioLevels {LOW = 0,HI = 1} PrioLevels;
+        static constexpr int LOW_RATIO = 1;
+        static constexpr int HI_RATIO = 10;
+        typedef enum PrioLevels: int {LOW = 0,HI = 1} PrioLevels;
         PrioLevels serv = HI; //Current priority level beign serviced.
-        uint32_t counter = 0; //Counter to track the weighted service
+        int counter = 0; //Counter to track the weighted service
         //Priority queues
-        std::deque<Packet*> prio_queues[NUM_PRIO_LEVELS] = {};
+        std::array<std::deque<Packet*>, NUM_PRIO_LEVELS> prio_queues = {};
         //Bytes in each queue
-        uint32_t bytes_in_queues[NUM_PRIO_LEVELS] = {0,0};
-
+        std::array<uint32_t, NUM_PRIO_LEVELS> bytes_in_queues = {0,0};
 };
 #endif

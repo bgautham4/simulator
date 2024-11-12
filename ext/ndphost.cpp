@@ -58,7 +58,7 @@ void NDPHost::schedule_pull_pacer() {
 
 void PullScheduleEvent::process_event() {
     _host->_pacer_evt = NULL;
-    using T = decltype(_host->_active_flows)::value_type;
+    using T = decltype(_host->_active_flows)::value_type; //NDPFlow *
     std::sort(_host->_active_flows.begin(), _host->_active_flows.end(), [](const T &a, const T &b) {
         return *a < *b;
     });
@@ -82,6 +82,5 @@ void PullScheduleEvent::process_event() {
             ++it;
         }
     }
-    //Didnt have any pulls. Pacer is free 
 }
 

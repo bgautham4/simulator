@@ -1,10 +1,9 @@
 #include "cutpayloadqueue.h"
 #include "../coresim/packet.h"
-#include <deque>
 #include <cassert>
 
-constexpr uint32_t CutPayloadQueue::LOW_RATIO;
-constexpr uint32_t CutPayloadQueue::HI_RATIO;
+constexpr int CutPayloadQueue::LOW_RATIO;
+constexpr int CutPayloadQueue::HI_RATIO;
 
 void CutPayloadQueue::enque(Packet *packet) {
     p_arrivals += 1;
@@ -17,7 +16,7 @@ void CutPayloadQueue::enque(Packet *packet) {
     }
 
     if (bytes_in_queues[lvl] + packet->size > limit_bytes) {
-        pkt_drop++;
+        ++pkt_drop;
         drop(packet);
         return;
     }

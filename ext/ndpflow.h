@@ -12,7 +12,7 @@
 class NDPRtxTimerEvent;
 
 class NDPFlow : public Flow {
-    friend class StormHost;
+    friend class NDPHost;
     friend class NDPRtxTimerEvent;
     friend class PullScheduleEvent;
     public:
