@@ -66,7 +66,6 @@ class NDPFlow : public Flow {
         Packet::seqno_t _sender_cum_ackno = 0;
         NDPRtxTimerEvent *_timer = NULL;
         bool _is_finished_at_receiver = false;
-
 };
 
 #define RTX_TIMEOUT 30

@@ -14,7 +14,6 @@ Packet::bytes_t NDPFlow::send(Packet::seqno_t seqno, bool pulled) {
     Packet::bytes_t bytes_sent = std::min(size - seqno, Packet::mss);
     bool last_packet = (seqno + bytes_sent >= size) ? true : false;
     auto p = new StormPacket(this, src, dst, seqno, bytes_sent + 40, last_packet);
-    //std::cout << "Packet has seqno " << p->seqno() << '\n';
     total_pkt_sent++;
     auto h = static_cast<NDPHost*>(src);
     //(pulled) ? h->enqueue_front_nic_buffer(p) : h->enqueue_back_nic_buffer(p);
