@@ -1,17 +1,20 @@
+# Base configuration file,
+# Specifies experiment parameters,
+# Comments begin with #
 queue_size: 12000
 propagation_delay: 650e-9
 bandwidth: 100e9
-queue_type: 6
-flow_type: 130
-host_type: 30
+queue_type: 6 #Cut Payload Queue for NDP experiments
+flow_type: 140 #NDP flow
+host_type: 40 #NDP host
 num_flow: 1000000
-flow_trace: trace_files/CDF_imc10.txt
+flow_trace: #Flow trace file to be used
 mean_flow_size: 0
 load_balancing: 0
 preemptive_queue: 0
 big_switch: 0
 traffic_imbalance: 0
-load: 0.80
+load: #Load to be used
 use_flow_trace: 0
 smooth_cdf: 1
 burst_at_beginning: 0
