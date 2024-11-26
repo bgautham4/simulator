@@ -1,9 +1,9 @@
 #!/bin/bash
 
-cd "${0%/*}" #CWD to parent dir of script
+cd "${0%/*}" || exit #CWD to parent dir of script
 
 function disp_help {
-    echo "Usage: --trace imc|wc|dm [--loads start:step:end]"
+    echo "Usage: --trace imc|wc|dm|tf|km|sgd [--loads start:step:end]"
 }
 
 TEMP=$(getopt -o '-h' -l 'trace:,loads:' -- "$@")
@@ -32,6 +32,15 @@ while true; do
                     ;;
                 'dm')
                     trace_file='trace_files/CDF_datamining.txt'
+                    ;;
+                'tf')
+                    trace_file='trace_files/CDF_tensorflow.txt'
+                    ;;
+                'km')
+                    trace_file='trace_files/CDF_kmeans.txt'
+                    ;;
+                'sgd')
+                    trace_file='trace_files/CDF_sgd.txt'
                     ;;
                 *)
                     echo "Invalid trace, use -h to see available traces"
@@ -95,7 +104,7 @@ mkdir -p "./results/$trace"
 
 python3 run_sim.py "$conf_dir" "./results/$trace" 
 RET="$?"
-if [[ "$RET" -gt 0 ]];then
+if [[ "$RET" -ne 0 ]];then
     echo "run_sim.py exited in error!"
 fi
 rm -rf "$conf_dir"
