@@ -91,7 +91,7 @@ sed -i '/^\s*$/d' "$base_conf"
 sed -i "s|\(^flow_trace:\).*|\1 $trace_file|" "$base_conf" #Use | as file path (trace) contains / which interferes with sed's subsitution rule
 
 for i in $(seq -f'%.2f' "$start" "$step" "$stop"); do
-    sed "s/\(^load:\)/\1 $i/" "$base_conf" > "$conf_dir/conf_file_$i.txt"
+    sed "s/\(^load:\).*/\1 $i/" "$base_conf" > "$conf_dir/conf_file_$i.txt"
 done
 
 rm "$base_conf"
