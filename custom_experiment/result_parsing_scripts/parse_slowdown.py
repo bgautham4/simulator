@@ -37,5 +37,5 @@ for bdp_bin, slowdown_list in slowdown_histogram.items():
     slowdown_data[bdp_bin] = (mean, percentile_99)
 
 print('bin', 'mean', '99')
-for bin in sorted(slowdown_data.keys):
+for bin in sorted(slowdown_data.keys()):
     print(bin, slowdown_data[bin][0], slowdown_data[bin][1])

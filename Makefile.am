@@ -10,6 +10,7 @@ simulator_SOURCES = 				 		 	 \
 					coresim/packet.cpp 		 	 \
 					coresim/event.cpp 			 \
 					coresim/topology.cpp 		 \
+					coresim/ft_topology.cpp \
 					coresim/flow.cpp 			 \
 					coresim/random_variable.cpp  \
 					ext/factory.cpp 		 	 \

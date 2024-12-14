@@ -3,9 +3,11 @@
 #include "../coresim/event.h"
 #include "../coresim/packet.h"
 #include "ndphost.h"
+#include "../run/params.h"
 
 extern double get_current_time();
 extern void add_to_event_queue(Event *ev);
+extern DCExpParams params;
 constexpr double NDPFlow::RTO;
 
 extern uint32_t num_outstanding_packets;
@@ -185,7 +187,7 @@ void NDPFlow::start_flow() {
 }
 
 void NDPFlow::send_intial_window() {
-    while ( (_seqno < size) && (_seqno < 49 * Packet::mss) ) {
+    while ( (_seqno < size) && (_seqno < params.BDP * Packet::mss) ) {
         send_pending_data();   
     }
 }

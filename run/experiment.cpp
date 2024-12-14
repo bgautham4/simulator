@@ -29,7 +29,7 @@
 #include "flow_generator.h"
 #include "stats.h"
 #include "params.h"
-
+#include "../coresim/ft_topology.h"
 #include "../ext/ideal.h"
 
 extern Topology *topology;
@@ -172,7 +172,13 @@ void run_experiment(int argc, char **argv, uint32_t exp_type) {
         topology = new BigSwitchTopology(params.num_hosts, params.bandwidth, params.queue_type);
     } 
     else {
-        topology = new PFabricTopology(params.num_hosts, params.num_agg_switches, params.num_core_switches, params.bandwidth, params.queue_type);
+        if (params.topology == "FatTree") {
+            params.num_hosts = 1024;
+            topology = new FatTreeTopology(16, params.bandwidth, params.queue_type); 
+        }
+        else {
+            topology = new PFabricTopology(params.num_hosts, params.num_agg_switches, params.num_core_switches, params.bandwidth, params.queue_type);
+        }
     }
 
     uint32_t num_flows = params.num_flows_to_run;

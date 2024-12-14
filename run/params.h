@@ -82,7 +82,8 @@ class DCExpParams {
         {
             return size_in_byte * 8 / this->bandwidth;
         }
-
+        std::string topology;
+        uint32_t BDP = 49;
 };
 
 

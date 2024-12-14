@@ -6,7 +6,7 @@ function disp_help {
     echo "Usage: --trace imc|wc|dm|tf|km|sgd [--loads start:step:end]"
 }
 
-TEMP=$(getopt -o '-h' -l 'trace:,loads:' -- "$@")
+TEMP=$(getopt -o '-h' -l 'trace:,loads:,topo:' -- "$@")
 if [[ $? -ne 0 ]]; then
     echo 'Invalid use, Terminating...' >&2
     echo 'Use -h to display help text.'
@@ -49,6 +49,18 @@ while true; do
             esac
             shift 2
             ;;
+        '--topo')
+            topo="$2"
+            case "$topo" in
+                'ft'|'ls')
+                    ;;
+                *)
+                    echo "Unknown topology $topo, use -h to see available topologies"
+                    exit 1
+                    ;;
+            esac
+            shift 2
+            ;;
         '--loads')
             IFS=':' read -ra TEMP <<< "$2"
             start="${TEMP[0]}"
@@ -86,7 +98,11 @@ conf_dir="/tmp/$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 13)"
 mkdir "$conf_dir"
 base_conf="$conf_dir/base_conf.txt"
 
-sed 's/#.*//g' ./base_conf.txt > "$base_conf"
+if [[ "$topo" == "ft" ]]; then
+    sed 's/#.*//g' ./base_conf_ft.txt > "$base_conf"
+else 
+    sed 's/#.*//g' ./base_conf.txt > "$base_conf"
+fi
 sed -i '/^\s*$/d' "$base_conf"
 sed -i "s|\(^flow_trace:\).*|\1 $trace_file|" "$base_conf" #Use | as file path (trace) contains / which interferes with sed's subsitution rule
 
@@ -96,13 +112,13 @@ done
 
 rm "$base_conf"
 
-if [[ -d ./results/$trace ]]; then
-    rm -rf "./results/$trace"
+if [[ -d "./results/$trace/$topo" ]]; then
+    rm -rf "./results/$trace/$topo"
 fi
 
-mkdir -p "./results/$trace"
+mkdir -p "./results/$trace/$topo"
 
-python3 run_sim.py "$conf_dir" "./results/$trace" 
+python3 run_sim.py "$conf_dir" "./results/$trace/$topo" 
 RET="$?"
 if [[ "$RET" -ne 0 ]];then
     echo "run_sim.py exited in error!"
